@@ -1,0 +1,48 @@
+# 树莓派串口通信及串口调试工具minicom
+树莓派3b串口默认是关闭的，它把硬件串口（物理引脚8 TXD、10 RXD）分配给了蓝牙，所以要使用串口通信首先得进行配置。
+
+树莓派串口设置
+1.打开串口
+
+sudo raspi-config
+
+选择Interfacing Options选择可以配置树莓派外设
+选择串口选项，enable
+2 在文件/boot/config.txt末添加：dtoverlay=pi3-miniuart-bt
+
+pi3-miniuart-bt是一个设备树文件，添加这句话之后就是将串口从蓝牙映射到硬件串口了，所以没有必要像一些教程一样去关闭蓝牙和配置文件
+
+sudo nano /boot/config.txt
+3.设置串口通信
+
+打开 /boot/cmdline.txt文件，删除console=serial0,115200
+sudo nano /boot/cmdline.txt
+编辑完成后保存
+4. 重启树莓派
+
+sudo reboot
+5 安装minicom
+
+sudo apt-get install minicom
+5.1 运行串口设置工具
+
+sudo minicom -s
+选择第三个
+配置参数如图
+6运行minicom
+
+sudo minicom -D /dev/ttyAMA0 -b 9600
+7.测试是否成功
+
+首先将树莓派RXD TXD短接；
+运行minicom，
+按Ctrl A(同时按住，然后松开)，然后按Z, 再按E
+进入后，输入一个字符会同时返回一个，说明设置成功。
+
+https://blog.csdn.net/qq_33799747/article/details/54692630
+https://blog.csdn.net/qq21497936/article/details/79758975
+--------------------- 
+作者：weixin_40660054 
+来源：CSDN 
+原文：https://blog.csdn.net/weixin_40660054/article/details/83831924 
+版权声明：本文为博主原创文章，转载请附上博文链接！
